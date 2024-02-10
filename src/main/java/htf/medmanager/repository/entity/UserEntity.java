@@ -27,5 +27,8 @@ public class UserEntity implements Serializable {
     private String mobileNumber;
     private TimerEntity defaultTimers;
     private Boolean enableReminder;
+
+    private Long createdAt;
+    private Long updatedAt;
 }
 

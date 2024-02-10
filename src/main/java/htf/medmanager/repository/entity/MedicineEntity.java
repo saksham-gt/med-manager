@@ -32,4 +32,7 @@ public class MedicineEntity implements Serializable {
     private String userId;
     private String status;
 
+    private Long createdAt;
+    private Long updatedAt;
+
 }

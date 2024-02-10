@@ -14,13 +14,10 @@ import org.springframework.stereotype.Service;
 public class OnboardingServiceImpl implements IOnboardingService {
     private final VonageClient client = VonageClient.builder().apiKey("8e8271a7").apiSecret("mRhwIKVE5MMtQfGn").build();
 
-    private final String brand = "Chang Pharma";
+    private final String brand = "Chhore Maglu Ke";
     @Override
     public GenerateOTPResponse generateOTP(String mobileNumber) {
         VerifyResponse response = client.getVerifyClient().verify(mobileNumber, brand);
-        if(response.getStatus() == VerifyStatus.ALREADY_REQUESTED) {
-            client.getVerifyClient().cancelVerification(response.getRequestId());
-        }
         if (response.getStatus() == VerifyStatus.OK || response.getStatus() == VerifyStatus.ALREADY_REQUESTED) {
             return GenerateOTPResponse.builder()
                     .requestId(response.getRequestId())
@@ -39,5 +36,6 @@ public class OnboardingServiceImpl implements IOnboardingService {
         } else {
             return Boolean.FALSE;
         }
+
     }
 }

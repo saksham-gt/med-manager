@@ -26,7 +26,7 @@ public class OnboardingController {
     private final IOnboardingService onboardingService;
 
     @Operation(summary = "Generate OTP")
-    @ApiResponse(responseCode = "201", description = "OTP generated successfully",
+    @ApiResponse(responseCode = "200", description = "OTP generated successfully",
             content = @Content(mediaType = "application/json"))
     @PostMapping(value = "/generate")
     public ResponseEntity<GenerateOTPResponse> generateOTP(@RequestBody GenerateOTPRequest request) {

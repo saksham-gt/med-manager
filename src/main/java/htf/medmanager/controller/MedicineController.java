@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import htf.medmanager.adapter.MedicineAdapter;
 import htf.medmanager.model.dto.MedicineDto;
 import htf.medmanager.model.request.AddMedicineRequest;
+import htf.medmanager.model.request.AddPrescriptionRequest;
 import htf.medmanager.model.request.UpdateMedicineRequest;
 import htf.medmanager.model.response.MedicineDetailsResponse;
 import htf.medmanager.service.IMedicineService;
@@ -31,10 +32,20 @@ public class MedicineController {
     @ApiResponse(responseCode = "201", description = "Medicine Added Successfully",
             content = @Content(mediaType = "application/json"))
     @PostMapping(value = "/")
-    public ResponseEntity<MedicineDetailsResponse> addMedicine(@RequestBody AddMedicineRequest request) throws JsonProcessingException {
+    public ResponseEntity<MedicineDetailsResponse> addMedicine(@RequestBody AddMedicineRequest request) {
         MedicineDto medicineDto = medicineService.addMedicine(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(MedicineAdapter.toMedicineDetailsResponse(medicineDto));
+    }
+
+    @Operation(summary = "Add Prescription")
+    @ApiResponse(responseCode = "201", description = "Prescription Added Successfully",
+            content = @Content(mediaType = "application/json"))
+    @PostMapping(value = "/bulk/")
+    public ResponseEntity<List<MedicineDetailsResponse>> addPrescription(@RequestBody AddPrescriptionRequest request) {
+        List<MedicineDto> medicines = request.getMedicines().stream().map(medicineService::addMedicine).toList();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(medicines.stream().map(MedicineAdapter::toMedicineDetailsResponse).toList());
     }
 
     @Operation(summary = "Update Medicine")
@@ -42,7 +53,7 @@ public class MedicineController {
             content = @Content(mediaType = "application/json"))
     @PatchMapping(value = "/{id}")
     public ResponseEntity<MedicineDetailsResponse> updateMedicine(@NotBlank @PathVariable("id") String medicineId,
-                                                          @RequestBody UpdateMedicineRequest request) throws JsonProcessingException {
+                                                          @RequestBody UpdateMedicineRequest request) {
         MedicineDto medicineDto = medicineService.updateMedicine(medicineId, request);
         return ResponseEntity.ok()
                 .body(MedicineAdapter.toMedicineDetailsResponse(medicineDto));
@@ -54,7 +65,7 @@ public class MedicineController {
     @ApiResponse(responseCode = "404", description = "Medicine Not Found",
             content = @Content(mediaType = "application/json"))
     @GetMapping(value = "/{id}")
-    public ResponseEntity<MedicineDetailsResponse> getMedicine(@NotBlank @PathVariable("id") String medicineId) throws JsonProcessingException {
+    public ResponseEntity<MedicineDetailsResponse> getMedicine(@NotBlank @PathVariable("id") String medicineId) {
         MedicineDto medicineDto = medicineService.getMedicine(medicineId);
         return ResponseEntity.ok()
                 .body(MedicineAdapter.toMedicineDetailsResponse(medicineDto));
@@ -67,13 +78,7 @@ public class MedicineController {
     public ResponseEntity<List<MedicineDetailsResponse>> getMedicineByUser(@NotBlank @PathVariable("userId") String userId) {
         List<MedicineDto> medicineList = medicineService.getMedicinesByUser(userId);
         return ResponseEntity.ok()
-                .body(medicineList.stream().map(medicineDto -> {
-                    try {
-                        return MedicineAdapter.toMedicineDetailsResponse(medicineDto);
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                }).toList());
+                .body(medicineList.stream().map(MedicineAdapter::toMedicineDetailsResponse).toList());
     }
 
     @Operation(summary = "Delete Medicine")
