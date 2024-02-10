@@ -1,6 +1,7 @@
 package htf.medmanager.repository.dao;
 
 import htf.medmanager.repository.entity.MedicineEntity;
+import htf.medmanager.repository.entity.response.MedicineResponseEntity;
 
 import java.util.List;
 

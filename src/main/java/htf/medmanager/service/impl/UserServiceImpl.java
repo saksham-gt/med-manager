@@ -6,6 +6,7 @@ import htf.medmanager.model.request.UpdateUserRequest;
 import htf.medmanager.repository.dao.IUserDao;
 import htf.medmanager.repository.entity.TimerEntity;
 import htf.medmanager.repository.entity.UserEntity;
+import htf.medmanager.repository.entity.response.UserResponseEntity;
 import htf.medmanager.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

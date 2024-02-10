@@ -29,7 +29,8 @@ public class UserController {
     @ApiResponse(responseCode = "201", description = "User Created Successfully",
             content = @Content(mediaType = "application/json"))
     @PostMapping(value = "/")
-    public ResponseEntity<UserDetailsResponse> createUser(@RequestBody CreateUserRequest request) throws JsonProcessingException {
+    public ResponseEntity<UserDetailsResponse> createUser(@RequestBody CreateUserRequest request) {
+        System.out.println("CREATE REQUEST RECEIVED WITH MOBILE NUMBER - " + request.getMobileNumber());
         UserDto userDto = userService.createUser(request.getMobileNumber());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(UserAdapter.toUserDetailsResponse(userDto));

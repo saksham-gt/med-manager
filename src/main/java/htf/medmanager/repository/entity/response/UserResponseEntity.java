@@ -1,14 +1,14 @@
-package htf.medmanager.repository.entity;
+package htf.medmanager.repository.entity.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.vonage.client.subaccounts.ListTransfersFilter;
+import htf.medmanager.repository.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @Builder
@@ -16,9 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserListEntity implements Serializable {
+public class UserResponseEntity implements Serializable {
 
-    private static final long serialVersionUID = -1056006015399914758L;
+    private static final long serialVersionUID = -3920830609042498516L;
 
-    private List<UserEntity> data;
+    private UserEntity data;
 }

@@ -7,6 +7,7 @@ import htf.medmanager.repository.dao.IUserDao;
 import htf.medmanager.repository.entity.MedicineListEntity;
 import htf.medmanager.repository.entity.UserEntity;
 import htf.medmanager.repository.entity.UserListEntity;
+import htf.medmanager.repository.entity.response.UserResponseEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +21,7 @@ public class UserDaoImpl implements IUserDao {
     private final INeureloClient neureloClient;
     private final String userURI = "/rest/user";
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
     public UserEntity save(UserEntity entity) {
         Long epoch = System.currentTimeMillis();
@@ -27,7 +29,8 @@ public class UserDaoImpl implements IUserDao {
         entity.setUpdatedAt(epoch);
         try {
             String requestString = objectMapper.writeValueAsString(entity);
-            return neureloClient.post(requestString, userURI, UserEntity.class);
+            System.out.println("USER TO BE SAVED - " + requestString);
+            return neureloClient.post(requestString, userURI, UserResponseEntity.class).getData();
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -40,7 +43,7 @@ public class UserDaoImpl implements IUserDao {
         entity.setUpdatedAt(epoch);
         try {
             String requestString = objectMapper.writeValueAsString(entity);
-            return neureloClient.patch(userId, userURI, requestString, UserEntity.class);
+            return neureloClient.patch(userId, userURI, requestString, UserResponseEntity.class).getData();
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -48,16 +51,16 @@ public class UserDaoImpl implements IUserDao {
 
     @Override
     public UserEntity findById(String userId) {
-        return neureloClient.get(userId, userURI, UserEntity.class);
+        return neureloClient.get(userId, userURI, UserResponseEntity.class).getData();
     }
 
     @Override
     public UserEntity findByMobileNumber(String mobileNumber) {
         UserListEntity users =  neureloClient.get(userURI, UserListEntity.class,
                 Map.of("mobileNumber.equals", mobileNumber));
-        if(users.getUsers().size() > 1) {
+        if(users.getData().size() > 1) {
             throw new RuntimeException("Multiple Users with Same Mobile Number");
         }
-        return users.getUsers().get(0);
+        return users.getData().get(0);
     }
 }

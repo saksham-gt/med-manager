@@ -6,6 +6,7 @@ import htf.medmanager.client.INeureloClient;
 import htf.medmanager.repository.dao.IMedicineDao;
 import htf.medmanager.repository.entity.MedicineEntity;
 import htf.medmanager.repository.entity.MedicineListEntity;
+import htf.medmanager.repository.entity.response.MedicineResponseEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -26,7 +27,7 @@ public class MedicineDaoImpl implements IMedicineDao {
         entity.setUpdatedAt(epoch);
         try {
             String requestString = objectMapper.writeValueAsString(entity);
-            return neureloClient.post(requestString, medicineUri, MedicineEntity.class);
+            return neureloClient.post(requestString, medicineUri, MedicineResponseEntity.class).getData();
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -38,7 +39,7 @@ public class MedicineDaoImpl implements IMedicineDao {
         entity.setUpdatedAt(epoch);
         try {
             String requestString = objectMapper.writeValueAsString(entity);
-            return neureloClient.patch(medicineId, medicineId, requestString, MedicineEntity.class);
+            return neureloClient.patch(medicineId, medicineId, requestString, MedicineResponseEntity.class).getData();
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -46,14 +47,14 @@ public class MedicineDaoImpl implements IMedicineDao {
 
     @Override
     public MedicineEntity findById(String medicineId) {
-        return neureloClient.get(medicineId, medicineUri, MedicineEntity.class);
+        return neureloClient.get(medicineId, medicineUri, MedicineResponseEntity.class).getData();
     }
 
     @Override
     public List<MedicineEntity> findByUserId(String userId) {
         MedicineListEntity medicines =  neureloClient.get(medicineUri, MedicineListEntity.class,
                 Map.of("userId.equals", userId));
-        return medicines.getMedicines();
+        return medicines.getData();
     }
 
     @Override

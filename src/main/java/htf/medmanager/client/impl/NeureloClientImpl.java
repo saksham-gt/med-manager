@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import htf.medmanager.client.INeureloClient;
 import org.springframework.stereotype.Repository;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -19,11 +18,6 @@ public class NeureloClientImpl implements INeureloClient {
 
     private final String baseUrl = "https://ap-south-1.aws.neurelo.com";
 
-
-
-    private final String medicineURI = "/rest/medicine/";
-
-    public final String userByMobileURI = "/rest/user/";
 
     @Override
     public <T> T patch(String id, String resourceUri, String requestString, Class<T> responseType) {
@@ -46,7 +40,7 @@ public class NeureloClientImpl implements INeureloClient {
     @Override
     public <T> T post(String requestString, String resourceUri, Class<T> responseType) {
         HttpClient client = HttpClient.newHttpClient();
-        String uri = String.format(baseUrl + resourceUri + "/_one");
+        String uri = String.format(baseUrl + resourceUri + "/__one");
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .header(headerKey, authKey)
@@ -120,6 +114,7 @@ public class NeureloClientImpl implements INeureloClient {
     }
 
     private <T> T parseResponse(String response, Class<T> responseType) {
+        System.out.println("PARSING RESPONSE -" + response);
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.readValue(response, responseType);

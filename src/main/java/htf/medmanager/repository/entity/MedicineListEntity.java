@@ -20,5 +20,5 @@ public class MedicineListEntity implements Serializable {
 
     private static final long serialVersionUID = -1056006015399914758L;
 
-    private List<MedicineEntity> medicines;
+    private List<MedicineEntity> data;
 }

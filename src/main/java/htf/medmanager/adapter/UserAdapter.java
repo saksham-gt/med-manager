@@ -50,6 +50,9 @@ public class UserAdapter {
     }
 
     public static TimerEntity toTimerEntity(TimerDto timerDto) {
+        if(Objects.isNull(timerDto)) {
+            return null;
+        }
         return TimerEntity.builder()
                 .breakfastTime(timerDto.getBreakfastTime())
                 .dinnerTime(timerDto.getDinnerTime())
@@ -58,6 +61,9 @@ public class UserAdapter {
     }
 
     public static TimerDto toTimerDto(TimerEntity timerEntity) {
+        if(Objects.isNull(timerEntity)) {
+            return null;
+        }
         return TimerDto.builder()
                 .breakfastTime(timerEntity.getBreakfastTime())
                 .dinnerTime(timerEntity.getDinnerTime())
