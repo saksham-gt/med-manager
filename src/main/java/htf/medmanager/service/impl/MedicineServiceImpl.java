@@ -23,9 +23,7 @@ public class MedicineServiceImpl implements IMedicineService {
 
     @Override
     public MedicineDto addMedicine(AddMedicineRequest request) {
-        String medicineId = "MED" + UUID.randomUUID();
         MedicineDto medicineDto = MedicineDto.builder()
-                .medicineId(medicineId)
                 .status("ACTIVE")
                 .drug(request.getDrug())
                 .form(request.getForm())
@@ -35,15 +33,14 @@ public class MedicineServiceImpl implements IMedicineService {
                 .timestamps(request.getTimestamps())
                 .userId(request.getUserId())
                 .build();
-        medicineDao.save(MedicineAdapter.toMedicineEntity(medicineDto));
-        return medicineDto;
+        MedicineEntity entity = medicineDao.save(MedicineAdapter.toMedicineEntity(medicineDto));
+        return MedicineAdapter.toMedicineDto(entity);
     }
 
     @Override
     public MedicineDto updateMedicine(String medicineId, UpdateMedicineRequest request) {
         MedicineDto medicineDto = MedicineAdapter.toMedicineDto(medicineDao.findById(medicineId));
         MedicineDto updatedDto = MedicineDto.builder()
-                .medicineId(medicineDto.getMedicineId())
                 .status(medicineDto.getStatus())
                 .userId(medicineDto.getUserId())
                 .drug(StringUtils.isBlank(request.getDrug()) ? medicineDto.getDrug() : request.getDrug())
@@ -54,8 +51,8 @@ public class MedicineServiceImpl implements IMedicineService {
                 .timestamps(Objects.isNull(request.getTimestamps()) ? medicineDto.getTimestamps() : request.getTimestamps())
                 .build();
 
-        medicineDao.update(MedicineAdapter.toMedicineEntity(updatedDto));
-        return medicineDto;
+        MedicineEntity entity = medicineDao.update(medicineId, MedicineAdapter.toMedicineEntity(updatedDto));
+        return MedicineAdapter.toMedicineDto(entity);
     }
 
     @Override
@@ -71,8 +68,6 @@ public class MedicineServiceImpl implements IMedicineService {
 
     @Override
     public void deleteMedicine(String medicineId) {
-        MedicineDto medicineDto = MedicineAdapter.toMedicineDto(medicineDao.findById(medicineId));
-        medicineDto.setStatus("DELETED");
-        medicineDao.update(MedicineAdapter.toMedicineEntity(medicineDto));
+        medicineDao.delete(medicineId);
     }
 }

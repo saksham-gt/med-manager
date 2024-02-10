@@ -30,7 +30,9 @@ public class OnboardingServiceImpl implements IOnboardingService {
 
     @Override
     public Boolean verifyOTP(String requestId, String code) {
+        System.out.println("VERIFY OTP - " + requestId + ", " + code);
         CheckResponse response = client.getVerifyClient().check(requestId, code);
+        System.out.println("STATUS RECEIVED - " + response.getStatus());
         if (response.getStatus() == VerifyStatus.OK) {
             return Boolean.TRUE;
         } else {

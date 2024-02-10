@@ -6,11 +6,13 @@ import java.util.List;
 
 public interface IMedicineDao {
 
-    void save(MedicineEntity entity);
+    MedicineEntity save(MedicineEntity entity);
 
-    void update(MedicineEntity entity);
+    MedicineEntity update(String medicineId, MedicineEntity entity);
 
     MedicineEntity findById(String medicineId);
 
     List<MedicineEntity> findByUserId(String userId);
+
+    void delete(String medicineId);
 }

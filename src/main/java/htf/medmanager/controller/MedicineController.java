@@ -1,6 +1,5 @@
 package htf.medmanager.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import htf.medmanager.adapter.MedicineAdapter;
 import htf.medmanager.model.dto.MedicineDto;
 import htf.medmanager.model.request.AddMedicineRequest;

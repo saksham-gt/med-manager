@@ -3,9 +3,9 @@ package htf.medmanager.repository.dao;
 import htf.medmanager.repository.entity.UserEntity;
 
 public interface IUserDao {
-    void save(UserEntity entity);
+    UserEntity save(UserEntity entity);
 
-    void update(UserEntity entity);
+    UserEntity update(String userId, UserEntity entity);
 
     UserEntity findById(String userId);
 

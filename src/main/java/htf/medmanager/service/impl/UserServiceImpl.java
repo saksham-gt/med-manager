@@ -24,9 +24,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserDto createUser(String mobileNumber) {
-        String userId = "U" + UUID.randomUUID();
         UserEntity userEntity = UserEntity.builder()
-                .userId(userId)
                 .mobileNumber(mobileNumber)
                 .defaultTimers(TimerEntity.builder()
                         .breakfastTime(getMealTime(9, 0))
@@ -35,15 +33,14 @@ public class UserServiceImpl implements IUserService {
                         .build())
                 .enableReminder(Boolean.TRUE)
                 .build();
-        userDao.save(userEntity);
-        return UserAdapter.toUserDto(userEntity);
+        UserEntity entity = userDao.save(userEntity);
+        return UserAdapter.toUserDto(entity);
     }
 
     @Override
     public UserDto updateUser(String userId, UpdateUserRequest request) {
         UserDto userDto = UserAdapter.toUserDto(userDao.findById(userId));
         UserEntity userEntity = UserEntity.builder()
-                .userId(userDto.getUserId())
                 .mobileNumber(userDto.getMobileNumber())
                 .age(Objects.isNull(request.getAge()) ? userDto.getAge() : request.getAge())
                 .enableReminder(Objects.isNull(request.getEnableReminder()) ? userDto.getEnableReminder() : request.getEnableReminder())
@@ -51,8 +48,8 @@ public class UserServiceImpl implements IUserService {
                 .defaultTimers(Objects.isNull(request.getDefaultTimers()) ?
                         UserAdapter.toTimerEntity(userDto.getDefaultTimers()) : UserAdapter.toTimerEntity(request.getDefaultTimers()))
                 .build();
-        userDao.update(userEntity);
-        return UserAdapter.toUserDto(userEntity);
+        UserEntity entity = userDao.update(userId, userEntity);
+        return UserAdapter.toUserDto(entity);
     }
 
     @Override
