@@ -51,7 +51,7 @@ public class MedicineController {
     @ApiResponse(responseCode = "200", description = "Medicine Update Successfully",
             content = @Content(mediaType = "application/json"))
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<MedicineDetailsResponse> updateMedicine(@NotBlank @PathVariable("id") String medicineId,
+    public ResponseEntity<MedicineDetailsResponse> updateMedicine(@PathVariable("id") String medicineId,
                                                           @RequestBody UpdateMedicineRequest request) {
         MedicineDto medicineDto = medicineService.updateMedicine(medicineId, request);
         return ResponseEntity.ok()
@@ -64,7 +64,7 @@ public class MedicineController {
     @ApiResponse(responseCode = "404", description = "Medicine Not Found",
             content = @Content(mediaType = "application/json"))
     @GetMapping(value = "/{id}")
-    public ResponseEntity<MedicineDetailsResponse> getMedicine(@NotBlank @PathVariable("id") String medicineId) {
+    public ResponseEntity<MedicineDetailsResponse> getMedicine(@PathVariable("id") String medicineId) {
         MedicineDto medicineDto = medicineService.getMedicine(medicineId);
         return ResponseEntity.ok()
                 .body(MedicineAdapter.toMedicineDetailsResponse(medicineDto));
@@ -74,7 +74,7 @@ public class MedicineController {
     @ApiResponse(responseCode = "200", description = "Medicines By User Found Successfully",
             content = @Content(mediaType = "application/json"))
     @GetMapping(value = "/user/{userId}")
-    public ResponseEntity<List<MedicineDetailsResponse>> getMedicineByUser(@NotBlank @PathVariable("userId") String userId) {
+    public ResponseEntity<List<MedicineDetailsResponse>> getMedicineByUser(@PathVariable("userId") String userId) {
         List<MedicineDto> medicineList = medicineService.getMedicinesByUser(userId);
         return ResponseEntity.ok()
                 .body(medicineList.stream().map(MedicineAdapter::toMedicineDetailsResponse).toList());
@@ -84,7 +84,7 @@ public class MedicineController {
     @ApiResponse(responseCode = "204", description = "Medicines Deleted Successfully",
             content = @Content(mediaType = "application/json"))
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<List<MedicineDetailsResponse>> deleteMedicine(@NotBlank @PathVariable("id") String medicineId) {
+    public ResponseEntity<List<MedicineDetailsResponse>> deleteMedicine(@PathVariable("id") String medicineId) {
         medicineService.deleteMedicine(medicineId);
         return ResponseEntity.ok().build();
     }

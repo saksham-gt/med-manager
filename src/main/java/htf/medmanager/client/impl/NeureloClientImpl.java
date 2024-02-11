@@ -5,9 +5,11 @@ import htf.medmanager.client.INeureloClient;
 import org.springframework.stereotype.Repository;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Repository
@@ -92,13 +94,16 @@ public class NeureloClientImpl implements INeureloClient {
     @Override
     public <T> T get(String resourceUri, Class<T> responseType, Map<String, String> filters) {
         HttpClient client = HttpClient.newHttpClient();
-        String uri = String.format(baseUrl + resourceUri);
+        String uri = baseUrl + resourceUri;
         StringBuilder queryParams = new StringBuilder("?");
         for(Map.Entry<String, String> e : filters.entrySet()) {
-            queryParams.append(e.getKey()).append("=").append(e.getValue()).append("&");
+            queryParams.append(URLEncoder.encode(e.getKey(), StandardCharsets.UTF_8));
+            queryParams.append("=");
+            queryParams.append(URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8));
+            queryParams.append("&");
         }
         queryParams.deleteCharAt(queryParams.length() - 1);
-
+        System.out.println(uri + queryParams);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri + queryParams))
                 .header(headerKey, authKey)

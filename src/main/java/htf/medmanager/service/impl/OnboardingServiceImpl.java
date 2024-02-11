@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class OnboardingServiceImpl implements IOnboardingService {
     private final VonageClient client = VonageClient.builder().apiKey("8e8271a7").apiSecret("mRhwIKVE5MMtQfGn").build();
 
-    private final String brand = "Chhore Maglu Ke";
+    private final String brand = "Chang Pharma";
     @Override
     public GenerateOTPResponse generateOTP(String mobileNumber) {
         VerifyResponse response = client.getVerifyClient().verify(mobileNumber, brand);

@@ -53,7 +53,7 @@ public class MedicineDaoImpl implements IMedicineDao {
     @Override
     public List<MedicineEntity> findByUserId(String userId) {
         MedicineListEntity medicines =  neureloClient.get(medicineUri, MedicineListEntity.class,
-                Map.of("userId.equals", userId));
+                Map.of("filter", String.format("{\"userId\":{\"equals\":\"%s\"}}", userId)));
         return medicines.getData();
     }
 

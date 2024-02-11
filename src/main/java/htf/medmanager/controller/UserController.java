@@ -1,6 +1,5 @@
 package htf.medmanager.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import htf.medmanager.adapter.UserAdapter;
 import htf.medmanager.model.dto.UserDto;
 import htf.medmanager.model.request.CreateUserRequest;
@@ -10,7 +9,6 @@ import htf.medmanager.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -40,8 +38,8 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "User Update Successfully",
             content = @Content(mediaType = "application/json"))
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<UserDetailsResponse> updateUser(@NotBlank @PathVariable("id") String userId,
-                                                          @RequestBody UpdateUserRequest request) throws JsonProcessingException {
+    public ResponseEntity<UserDetailsResponse> updateUser(@PathVariable("id") String userId,
+                                                          @RequestBody UpdateUserRequest request) {
         UserDto userDto = userService.updateUser(userId, request);
         return ResponseEntity.ok()
                 .body(UserAdapter.toUserDetailsResponse(userDto));
@@ -53,7 +51,7 @@ public class UserController {
     @ApiResponse(responseCode = "404", description = "User Not Found",
             content = @Content(mediaType = "application/json"))
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDetailsResponse> getUserById(@NotBlank @PathVariable("id") String userId) throws JsonProcessingException {
+    public ResponseEntity<UserDetailsResponse> getUserById(@PathVariable("id") String userId) {
         UserDto userDto = userService.getUserById(userId);
         return ResponseEntity.ok()
                 .body(UserAdapter.toUserDetailsResponse(userDto));
@@ -62,10 +60,8 @@ public class UserController {
     @Operation(summary = "Get User By Mobile Number")
     @ApiResponse(responseCode = "200", description = "User Found Successfully",
             content = @Content(mediaType = "application/json"))
-    @ApiResponse(responseCode = "404", description = "User Not Found",
-            content = @Content(mediaType = "application/json"))
-    @GetMapping(value = "/mobileNumber/{mobileNumber}")
-    public ResponseEntity<UserDetailsResponse> getUserByMobileNumber(@NotBlank @PathVariable("mobileNumber") String mobileNumber) throws JsonProcessingException {
+    @GetMapping(value = "/mobileNumber/{num}")
+    public ResponseEntity<UserDetailsResponse> getUserByMobileNumber(@PathVariable("num") String mobileNumber) {
         UserDto userDto = userService.getUserByMobileNumber(mobileNumber);
         return ResponseEntity.ok()
                 .body(UserAdapter.toUserDetailsResponse(userDto));

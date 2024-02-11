@@ -18,7 +18,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddPrescriptionRequest implements Serializable {
 
-    private static final long serialVersionUID = -8859936871764606703L;
+    private static final long serialVersionUID = -6579294444884837074L;
 
     private List<AddMedicineRequest> medicines;
 }

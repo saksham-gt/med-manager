@@ -57,7 +57,7 @@ public class UserDaoImpl implements IUserDao {
     @Override
     public UserEntity findByMobileNumber(String mobileNumber) {
         UserListEntity users =  neureloClient.get(userURI, UserListEntity.class,
-                Map.of("mobileNumber.equals", mobileNumber));
+                Map.of("filter", String.format("{\"mobileNumber\":{\"equals\":\"%s\"}}", mobileNumber)));
         if(users.getData().size() > 1) {
             throw new RuntimeException("Multiple Users with Same Mobile Number");
         }
